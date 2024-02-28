@@ -26,9 +26,15 @@ public class FareQuoteService {
 		FareQuoteResponse res= new FareQuoteResponse();
 
 		FareQuoteResponse responseT=microservice.postRequest(request,res,"https://xmloutapi.tboair.com/api/v1/Detail/FareQuote");
-		AirRevalidateResponseModel response= serviceMapFareQuote.FareQuoteRS(responseT,model);
-		System.out.println(response);
-		return response;
+		
+		if(responseT!=null) {
+			AirRevalidateResponseModel response= serviceMapFareQuote.FareQuoteRS(responseT,model);
+			System.out.println(response);
+			return response;
+		}else {
+			return null;
+
+		}
 	}
 
 

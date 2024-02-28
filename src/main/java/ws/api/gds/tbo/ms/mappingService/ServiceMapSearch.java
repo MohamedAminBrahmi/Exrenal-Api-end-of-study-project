@@ -103,19 +103,20 @@ public class ServiceMapSearch {
 
 	@SuppressWarnings("unused")
 	public AirLowFareSearchResultModel SearchRS(SearchResponse responseGds, FlightSearchModel model) {
-		AirLowFareSearchResultModel response = new AirLowFareSearchResultModel();
-
-		response.setSuccess(responseGds.isSuccess());
-		response.setNbPassenger(model.getQteADT() + model.getQteCHD() + model.getQteINF());
-		response.setDepartDate(model.getDepartleVol1());
-		response.setReturnDate(model.getRetourleVol1());
-		response.setNbAdt(model.getQteADT());
-		response.setNbChd(model.getQteCHD());
-		response.setNbInf(model.getQteINF());
-
-		System.out.println(responseGds.isDomestic());
+		
 
 		if (responseGds != null) {
+			AirLowFareSearchResultModel response = new AirLowFareSearchResultModel();
+
+			response.setSuccess(responseGds.isSuccess());
+			response.setNbPassenger(model.getQteADT() + model.getQteCHD() + model.getQteINF());
+			response.setDepartDate(model.getDepartleVol1());
+			response.setReturnDate(model.getRetourleVol1());
+			response.setNbAdt(model.getQteADT());
+			response.setNbChd(model.getQteCHD());
+			response.setNbInf(model.getQteINF());
+
+			System.out.println(responseGds.isDomestic());
 			System.out.println(response.getSuccess());
 			if (response.getSuccess() == false) {
 
@@ -134,15 +135,13 @@ public class ServiceMapSearch {
 
 			} else {
 				System.out.println("the error list is Null !! ");
-			}
-			;
-
-		}
-		;
+			}		
+		
 		if (responseGds.getResults() != null || !responseGds.getResults().isEmpty()) {
+			
 
 			List<PricedItineraryModel> pricedItineraryModels = new ArrayList<>();
-
+			
 			responseGds.getResults().forEach(r -> {
 				r.forEach(i -> {
 
@@ -300,6 +299,9 @@ public class ServiceMapSearch {
 		}
 
 		return response;
+		}else {
+			return null;
+		}
 
 	}
 

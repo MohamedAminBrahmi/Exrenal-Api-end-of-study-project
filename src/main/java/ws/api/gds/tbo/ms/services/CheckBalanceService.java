@@ -22,9 +22,15 @@ public class CheckBalanceService {
 		AuthenticationResponse response=new AuthenticationResponse();
 
 		AuthenticationResponse responseT=microservice.postRequest(request,response,"https://xmloutapi.tboair.com/API/V1//Wallet/GetAvailableBalance");
-		String result = serviceMapCheck.CheckRS(responseT);
-
+		
+			
+			if(responseT!=null) {
+				String result = serviceMapCheck.CheckRS(responseT);
 			return result;
+			}else {
+				return null;
+
+			}
 		}
 
 }
