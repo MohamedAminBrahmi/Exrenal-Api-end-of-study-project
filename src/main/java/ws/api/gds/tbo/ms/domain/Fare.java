@@ -99,6 +99,18 @@ public class Fare {
 
 
 
+	public String getAgentPreferredCurrency() {
+		return agentPreferredCurrency;
+	}
+
+
+
+	public void setAgentPreferredCurrency(String agentPreferredCurrency) {
+		this.agentPreferredCurrency = agentPreferredCurrency;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "Fare [totalFare=" + totalFare + ", fareType=" + fareType + ", agentMarkup=" + agentMarkup

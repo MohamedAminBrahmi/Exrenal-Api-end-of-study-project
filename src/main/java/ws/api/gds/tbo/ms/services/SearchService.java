@@ -12,27 +12,23 @@ import ws.api.gds.tbo.ms.model.FlightSearchModel;
 
 @Service
 public class SearchService {
-	
+
 	@Autowired
 	ServiceMapSearch serviceMapSearch;
 	@Autowired
 	Microservice<SearchRequest, SearchResponse> microservice;
-	
+
 	public AirLowFareSearchResultModel search(FlightSearchModel model) {
-		
+
 		SearchRequest request = serviceMapSearch.SearchRQ(model);
 		System.out.println(request);
-		SearchResponse res= new SearchResponse();
+		SearchResponse res = new SearchResponse();
 
-		SearchResponse responseT=microservice.postRequest(request,res,"https://xmloutapi.tboair.com/api/v1/Search/Search");
-		AirLowFareSearchResultModel response= serviceMapSearch.SearchRS(responseT,model);
+		SearchResponse responseT = microservice.postRequest(request, res,
+				model.getGdsModel().getUrl()+"api/v1/Search/Search");
+		AirLowFareSearchResultModel response = serviceMapSearch.SearchRS(responseT, model);
 		System.out.println(response);
 
-
-		
-
-
-		
 		return response;
 	}
 
