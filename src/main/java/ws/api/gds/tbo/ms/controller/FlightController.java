@@ -7,15 +7,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import ws.api.gds.tbo.ms.model.AirLowFareSearchResultModel;
 import ws.api.gds.tbo.ms.model.AirRevalidateResponseModel;
 import ws.api.gds.tbo.ms.model.AvailabilitySSRsRequest;
 import ws.api.gds.tbo.ms.model.FareRulesResponseModel;
+import ws.api.gds.tbo.ms.model.FlightBookingModel;
 import ws.api.gds.tbo.ms.model.FlightSearchModel;
 import ws.api.gds.tbo.ms.model.GdsSessionModel;
 import ws.api.gds.tbo.ms.model.PricedItineraryModel;
+import ws.api.gds.tbo.ms.model.TripDetailsResponseModel;
 import ws.api.gds.tbo.ms.services.AuthenticationService;
+import ws.api.gds.tbo.ms.services.BookingService;
 import ws.api.gds.tbo.ms.services.CheckBalanceService;
 import ws.api.gds.tbo.ms.services.FareQuoteService;
 import ws.api.gds.tbo.ms.services.FareRulesService;
@@ -38,6 +40,8 @@ public class FlightController {
 	FareRulesService fareRulesService;
 	@Autowired
 	GetSSRService getSSRService;
+	@Autowired
+	BookingService bookingService;
 
 	@PostMapping("/getToken")
 	public ResponseEntity<String> authenticate(@RequestBody GdsSessionModel gds) {
@@ -92,6 +96,16 @@ public class FlightController {
 	@PostMapping("/getSSR")
 	public ResponseEntity<Object> getSSRMeth(@RequestBody AvailabilitySSRsRequest model) {
 		Object result = getSSRService.getSSR(model);
+		if (result != null) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+
+	}
+	
+	@PostMapping("/Booking")
+	public ResponseEntity<TripDetailsResponseModel> bookingMeth(@RequestBody FlightBookingModel model) {
+		TripDetailsResponseModel result = bookingService.booking(model);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}

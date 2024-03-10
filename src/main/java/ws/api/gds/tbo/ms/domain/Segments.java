@@ -11,7 +11,7 @@ public class Segments {
     @JsonProperty("AllianceInfo") 
     private Object allianceInfo;
     @JsonProperty("OperatingCarrier") 
-    private Object operatingCarrier;
+    private String operatingCarrier;
     @JsonProperty("SegmentIndicator") 
     private int segmentIndicator;
     @JsonProperty("Airline") 
@@ -23,9 +23,9 @@ public class Segments {
     @JsonProperty("FlightNumber") 
     private String flightNumber;
     @JsonProperty("DepartureTime") 
-    private Date departureTime;
+    private String departureTime;
     @JsonProperty("ArrivalTime") 
-    private Date arrivalTime;
+    private String arrivalTime;
     @JsonProperty("BookingClass") 
     private String bookingClass;
     @JsonProperty("FlightStatus") 
@@ -37,7 +37,7 @@ public class Segments {
     @JsonProperty("ETicketEligible") 
     private boolean eTicketEligible;
     @JsonProperty("AirlinePNR") 
-    private Object airlinePNR;
+    private String airlinePNR;
     @JsonProperty("Craft") 
     private String craft;
     @JsonProperty("StopOver") 
@@ -126,10 +126,10 @@ public class Segments {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Segments(int noOfSeatAvailable, Object allianceInfo, Object operatingCarrier, int segmentIndicator,
-			String airline, Origin origin, Destination destination, String flightNumber, Date departureTime,
-			Date arrivalTime, String bookingClass, int flightStatus, Object status, Object mealType,
-			boolean eTicketEligible, Object airlinePNR, String craft, boolean stopOver, int stops, int mile,
+	public Segments(int noOfSeatAvailable, Object allianceInfo, String operatingCarrier, int segmentIndicator,
+			String airline, Origin origin, Destination destination, String flightNumber, String departureTime,
+			String arrivalTime, String bookingClass, int flightStatus, Object status, Object mealType,
+			boolean eTicketEligible, String airlinePNR, String craft, boolean stopOver, int stops, int mile,
 			String duration, String groundTime, String accumulatedDuration, Object stopPoint, Date stopPointArrivalTime,
 			Date stopPointDepartureTime, String includedBaggage, String cabinBaggage, String cabinClass,
 			Object additionalBaggage, AirlineDetails airlineDetails, String airlineName, Object departureDateTime,
@@ -210,10 +210,10 @@ public class Segments {
 	public void setAllianceInfo(Object allianceInfo) {
 		this.allianceInfo = allianceInfo;
 	}
-	public Object getOperatingCarrier() {
+	public String getOperatingCarrier() {
 		return operatingCarrier;
 	}
-	public void setOperatingCarrier(Object operatingCarrier) {
+	public void setOperatingCarrier(String operatingCarrier) {
 		this.operatingCarrier = operatingCarrier;
 	}
 	public int getSegmentIndicator() {
@@ -246,16 +246,16 @@ public class Segments {
 	public void setFlightNumber(String flightNumber) {
 		this.flightNumber = flightNumber;
 	}
-	public Date getDepartureTime() {
+	public String getDepartureTime() {
 		return departureTime;
 	}
-	public void setDepartureTime(Date departureTime) {
+	public void setDepartureTime(String departureTime) {
 		this.departureTime = departureTime;
 	}
-	public Date getArrivalTime() {
+	public String getArrivalTime() {
 		return arrivalTime;
 	}
-	public void setArrivalTime(Date arrivalTime) {
+	public void setArrivalTime(String arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 	public String getBookingClass() {
@@ -288,10 +288,10 @@ public class Segments {
 	public void seteTicketEligible(boolean eTicketEligible) {
 		this.eTicketEligible = eTicketEligible;
 	}
-	public Object getAirlinePNR() {
+	public String getAirlinePNR() {
 		return airlinePNR;
 	}
-	public void setAirlinePNR(Object airlinePNR) {
+	public void setAirlinePNR(String airlinePNR) {
 		this.airlinePNR = airlinePNR;
 	}
 	public String getCraft() {

@@ -45,7 +45,7 @@ public class ServiceMapSearch {
 			} else if (intValue == 3) {
 				request.setJourneyType(JourneyType.MultiCity);
 			}
-			;
+			
 
 		} else {
 			System.err.println("Error: typeSearch is null");
@@ -64,7 +64,6 @@ public class ServiceMapSearch {
 		} else if (model.getCabinType().equals("F")) {
 			request.setFlightCabinClass(FlightCabinClass.First);
 		}
-		;
 
 		ArrayList<Segment> segments = new ArrayList<>();
 		if (model.getTypeSearch() == 1 && model.getDepartVol1() != null && model.getDestinationVol1() != null) {
@@ -74,16 +73,20 @@ public class ServiceMapSearch {
 		}
 		if (model.getTypeSearch() == 2 && model.getDepartVol1() != null && model.getDestinationVol1() != null
 				&& model.getDepartVol2() != null && model.getDestinationVol2() != null) {
+			
 			Segment seg = new Segment(model.getDepartVol1(), model.getDestinationVol1(), model.getDepartleVol1(),
 					model.getDepartleVol2());
 			segments.add(seg);
+			
 			Segment seg1 = new Segment(model.getDepartVol2(), model.getDestinationVol2(), model.getDepartleVol2(),
 					model.getRetourleVol1());
 			segments.add(seg1);
+			
 		}
 		if (model.getTypeSearch() == 3 && model.getDepartVol1() != null && model.getDestinationVol1() != null
 				&& model.getDepartVol2() != null && model.getDestinationVol2() != null && model.getDepartVol3() != null
 				&& model.getDestinationVol3() != null) {
+			
 			Segment seg = new Segment(model.getDepartVol1(), model.getDestinationVol1(), model.getDepartleVol1(),
 					model.getDepartleVol2());
 			segments.add(seg);
@@ -141,160 +144,347 @@ public class ServiceMapSearch {
 			
 
 			List<PricedItineraryModel> pricedItineraryModels = new ArrayList<>();
-			
-			responseGds.getResults().forEach(r -> {
-				r.forEach(i -> {
+			System.out.println(responseGds.getResults().get(0).get(0).getJourneyType());
 
-					PricedItineraryModel result = new PricedItineraryModel();
-					result.setResultId(i.getResultId());
+			if(responseGds.getResults().get(0).get(0).getJourneyType()==1) {
+				responseGds.getResults().forEach(r -> {
+					r.forEach(i -> {
 
-					// on a fait le mapping du trackingId dans transactionId
-					result.setTransactionID(responseGds.getTrackingId());
+						PricedItineraryModel result = new PricedItineraryModel();
+						result.setResultId(i.getResultId());
 
-					AirItineraryPricingInfoModel airIt = new AirItineraryPricingInfoModel();
+						// on a fait le mapping du trackingId dans transactionId
+						result.setTransactionID(responseGds.getTrackingId());
 
-					if (i.isLcc() == true) {
-						airIt.setFareType("Basic");
-					} else {
-						airIt.setFareType("GDS");
+						AirItineraryPricingInfoModel airIt = new AirItineraryPricingInfoModel();
 
-					}
+						if (i.isLcc() == true) {
+							airIt.setFareType("Basic");
+						} else {
+							airIt.setFareType("GDS");
 
-					if (i.isNonRefundable() == true) {
-						airIt.setIsRefundable("N");
-					} else {
-						airIt.setIsRefundable("O");
+						}
 
-					}
-					/*
-					 * Start mapping PTCFareBreakdownModel
-					 */
-					List<PTCFareBreakdownModel> ptcFareBreakdowns = new ArrayList<>();
-					i.getFareBreakdown().forEach(f -> {
+						if (i.isNonRefundable() == true) {
+							airIt.setIsRefundable("N");
+						} else {
+							airIt.setIsRefundable("O");
 
-						PTCFareBreakdownModel ptcFareBreakdown = new PTCFareBreakdownModel();
-						// mapping PassengerTypeQuantityModel
-						PassengerTypeQuantityModel passengerTypeQuantityModel = new PassengerTypeQuantityModel();
-						passengerTypeQuantityModel.setQuantity(f.getPassengerCount());
-						passengerTypeQuantityModel.setCode(f.getPassengerType() == 1 ? "AHD" : f.getPassengerType() ==2 ? "CHD" : "INF");
-						ptcFareBreakdown.setPassengerTypeQuantity(passengerTypeQuantityModel);
+						}
+						/*
+						 * Start mapping PTCFareBreakdownModel
+						 */
+						List<PTCFareBreakdownModel> ptcFareBreakdowns = new ArrayList<>();
+						i.getFareBreakdown().forEach(f -> {
 
-						// mapping PassengerFareModel
-						PassengerFareModel passengerFareModel = new PassengerFareModel();
-						// mapping totalFare
-						FareModel totalFare = new FareModel();
-						totalFare.setAmount(Double.toString(f.getTotalFare()));
-						totalFare.setCurrencyCode(f.getCurrency());
-						totalFare.setDecimalPlaces(2);
-						// mapping baseFare
-						FareModel baseFare = new FareModel();
-						baseFare.setAmount(Double.toString(f.getBaseFare()));
-						baseFare.setCurrencyCode(f.getCurrency());
-						baseFare.setDecimalPlaces(2);
+							PTCFareBreakdownModel ptcFareBreakdown = new PTCFareBreakdownModel();
+							// mapping PassengerTypeQuantityModel
+							PassengerTypeQuantityModel passengerTypeQuantityModel = new PassengerTypeQuantityModel();
+							passengerTypeQuantityModel.setQuantity(f.getPassengerCount());
+							passengerTypeQuantityModel.setCode(f.getPassengerType() == 1 ? "AHD" : f.getPassengerType() ==2 ? "CHD" : "INF");
+							ptcFareBreakdown.setPassengerTypeQuantity(passengerTypeQuantityModel);
 
-						// mapping tax
-						FareModel tax = new FareModel();
-						tax.setAmount(Double.toString(f.getTax()));
-						tax.setCurrencyCode(f.getCurrency());
-						tax.setDecimalPlaces(2);
+							// mapping PassengerFareModel
+							PassengerFareModel passengerFareModel = new PassengerFareModel();
+							// mapping totalFare
+							FareModel totalFare = new FareModel();
+							totalFare.setAmount(Double.toString(f.getTotalFare()));
+							totalFare.setCurrencyCode(f.getCurrency());
+							totalFare.setDecimalPlaces(2);
+							// mapping baseFare
+							FareModel baseFare = new FareModel();
+							baseFare.setAmount(Double.toString(f.getBaseFare()));
+							baseFare.setCurrencyCode(f.getCurrency());
+							baseFare.setDecimalPlaces(2);
 
-						passengerFareModel.setTotalFare(totalFare);
-						passengerFareModel.setBaseFare(baseFare);
-						passengerFareModel.setTax(tax);
-						ptcFareBreakdown.setPassengerFare(passengerFareModel);
-						ptcFareBreakdowns.add(ptcFareBreakdown);
+							// mapping tax
+							FareModel tax = new FareModel();
+							tax.setAmount(Double.toString(f.getTax()));
+							tax.setCurrencyCode(f.getCurrency());
+							tax.setDecimalPlaces(2);
 
-					});
-					/*
-					 * End mapping PTCFareBreakdownModel
-					 */
-					
-					/*
-					 * Start mapping ItinTotalFareModel
-					 */
-					ItinTotalFareModel itinTotalFare = new ItinTotalFareModel();
-					if(i.getFare()!= null) {
-						// mapping totalFare
-						FareModel totalFare = new FareModel();
-						totalFare.setAmount(Double.toString(i.getFare().getTotalFare()));
-						totalFare.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
-						totalFare.setDecimalPlaces(2);
-						// mapping baseFare
-						FareModel baseFare = new FareModel();
-						baseFare.setAmount(Double.toString(i.getFare().getBaseFare()));
-						baseFare.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
-						baseFare.setDecimalPlaces(2);
+							passengerFareModel.setTotalFare(totalFare);
+							passengerFareModel.setBaseFare(baseFare);
+							passengerFareModel.setTax(tax);
+							ptcFareBreakdown.setPassengerFare(passengerFareModel);
+							ptcFareBreakdowns.add(ptcFareBreakdown);
 
-						// mapping tax
-						FareModel tax = new FareModel();
-						tax.setAmount(Double.toString(i.getFare().getTax()));
-						tax.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
-						tax.setDecimalPlaces(2);
-						itinTotalFare.setBaseFare(baseFare);
-						itinTotalFare.setTotaleFare((float) i.getFare().getTotalFare());
-						itinTotalFare.setTotalFare(totalFare);
-						itinTotalFare.setTotalTax(tax);
+						});
+						/*
+						 * End mapping PTCFareBreakdownModel
+						 */
 						
+						/*
+						 * Start mapping ItinTotalFareModel
+						 */
+						ItinTotalFareModel itinTotalFare = new ItinTotalFareModel();
+						if(i.getFare()!= null) {
+							// mapping totalFare
+							FareModel totalFare = new FareModel();
+							totalFare.setAmount(Double.toString(i.getFare().getTotalFare()));
+							totalFare.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
+							totalFare.setDecimalPlaces(2);
+							// mapping baseFare
+							FareModel baseFare = new FareModel();
+							baseFare.setAmount(Double.toString(i.getFare().getBaseFare()));
+							baseFare.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
+							baseFare.setDecimalPlaces(2);
 
-					}
-					airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
-					airIt.setItinTotalFare(itinTotalFare);
+							// mapping tax
+							FareModel tax = new FareModel();
+							tax.setAmount(Double.toString(i.getFare().getTax()));
+							tax.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
+							tax.setDecimalPlaces(2);
+							itinTotalFare.setBaseFare(baseFare);
+							itinTotalFare.setTotaleFare((float) i.getFare().getTotalFare());
+							itinTotalFare.setTotalFare(totalFare);
+							itinTotalFare.setTotalTax(tax);
+							
 
-					
-					System.out.println("--------------------->" + airIt.getFareType());
-					System.out.println("--------------------->" + airIt.getIsRefundable());
+						}
+						airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
+						airIt.setItinTotalFare(itinTotalFare);
 
-					result.setAirItineraryPricingInfo(airIt);
+						
+						System.out.println("--------------------->" + airIt.getFareType());
+						System.out.println("--------------------->" + airIt.getIsRefundable());
 
-					List<OriginDestinationOptionModel> OriginList = new ArrayList<>();
+						result.setAirItineraryPricingInfo(airIt);
 
-					i.getSegments().forEach(j -> {
-						List<FlightSegmentModel> flightSegments = new ArrayList<>();
+						List<OriginDestinationOptionModel> OriginList = new ArrayList<>();
 
-						j.forEach(k -> {
+						i.getSegments().forEach(j -> {
+							List<FlightSegmentModel> flightSegments = new ArrayList<>();
 
-							FlightSegmentModel flightSegment = new FlightSegmentModel();
+							j.forEach(k -> {
 
-							flightSegment.setCabinClassCode(k.getCabinClass());
-							System.out.println("--------------------->" + flightSegment.getCabinClassCode());
+								FlightSegmentModel flightSegment = new FlightSegmentModel();
 
-							flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
-							flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
-							flightSegment.setEticket(k.iseTicketEligible());
+								flightSegment.setCabinClassCode(k.getCabinClass());
+								System.out.println("--------------------->" + flightSegment.getCabinClassCode());
 
-							flightSegment.setFligthDuration(k.getDuration());
-							flightSegment.setIsStop(k.isStopOver());
-							flightSegment.setStopQuantity(k.getStops());
-							flightSegment.setBaggage(k.getIncludedBaggage());
-							flightSegment.setAirlinePnr(String.valueOf(k.getAirlinePNR()));
-							flightSegment.setArrivalAirportLocationCode(k.getDestination().getAirportCode());
-							flightSegment.setArrivalAirportLocation(k.getDestination().getAirportName());
-							flightSegment.setDepartureAirportLocationCode(k.getOrigin().getAirportCode());
-							flightSegment.setDepartureAirportLocation(k.getOrigin().getAirportName());
-							flightSegment.setFlightNumber(k.getAirlineDetails().getFlightNumber());
-							flightSegment.setAirlineReservationCode(k.getAirlineDetails().getAirlineCode());
-							flightSegment.setMarketingAirline(k.getAirlineDetails().getAirlineName());
-							flightSegment.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
-							flightSegment.setCabinClassText(k.getCabinClass());
-							flightSegment.setSeat(k.getCabinBaggage());
+								flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
+								flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
+								flightSegment.setEticket(k.iseTicketEligible());
 
-							flightSegments.add(flightSegment);
+								flightSegment.setFligthDuration(k.getDuration());
+								flightSegment.setIsStop(k.isStopOver());
+								flightSegment.setStopQuantity(k.getStops());
+								flightSegment.setBaggage(k.getIncludedBaggage());
+								flightSegment.setAirlinePnr(String.valueOf(k.getAirlinePNR()));
+								flightSegment.setArrivalAirportLocationCode(k.getDestination().getAirportCode());
+								flightSegment.setArrivalAirportLocation(k.getDestination().getAirportName());
+								flightSegment.setDepartureAirportLocationCode(k.getOrigin().getAirportCode());
+								flightSegment.setDepartureAirportLocation(k.getOrigin().getAirportName());
+								flightSegment.setFlightNumber(k.getAirlineDetails().getFlightNumber());
+								flightSegment.setAirlineReservationCode(k.getAirlineDetails().getAirlineCode());
+								flightSegment.setMarketingAirline(k.getAirlineDetails().getAirlineName());
+								flightSegment.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
+								flightSegment.setCabinClassText(k.getCabinClass());
+								flightSegment.setSeat(k.getCabinBaggage());
+
+								flightSegments.add(flightSegment);
+
+							});
+
+							OriginDestinationOptionModel Origin = new OriginDestinationOptionModel();
+							Origin.setFlightSegment(flightSegments);
+
+							OriginList.add(Origin);
 
 						});
 
-						OriginDestinationOptionModel Origin = new OriginDestinationOptionModel();
-						Origin.setFlightSegment(flightSegments);
+						result.setOriginDestinationOptions(OriginList);
 
-						OriginList.add(Origin);
-
+						pricedItineraryModels.add(result);
+						response.setPricedItineraries(pricedItineraryModels);
 					});
-
-					result.setOriginDestinationOptions(OriginList);
-
-					pricedItineraryModels.add(result);
-					response.setPricedItineraries(pricedItineraryModels);
 				});
-			});
+			}else if(responseGds.getResults().get(0).get(0).getJourneyType()==2){
+				responseGds.getResults().forEach(r -> {
+					r.forEach(i -> {
+
+						PricedItineraryModel result = new PricedItineraryModel();
+						result.setResultId(i.getResultId());
+
+						// on a fait le mapping du trackingId dans transactionId
+						result.setTransactionID(responseGds.getTrackingId());
+
+						AirItineraryPricingInfoModel airIt = new AirItineraryPricingInfoModel();
+
+						if (i.isLcc() == true) {
+							airIt.setFareType("Basic");
+						} else {
+							airIt.setFareType("GDS");
+
+						}
+
+						if (i.isNonRefundable() == true) {
+							airIt.setIsRefundable("N");
+						} else {
+							airIt.setIsRefundable("O");
+
+						}
+						/*
+						 * Start mapping PTCFareBreakdownModel
+						 */
+						List<PTCFareBreakdownModel> ptcFareBreakdowns = new ArrayList<>();
+						i.getFareBreakdown().forEach(f -> {
+
+							PTCFareBreakdownModel ptcFareBreakdown = new PTCFareBreakdownModel();
+							// mapping PassengerTypeQuantityModel
+							PassengerTypeQuantityModel passengerTypeQuantityModel = new PassengerTypeQuantityModel();
+							passengerTypeQuantityModel.setQuantity(f.getPassengerCount());
+							passengerTypeQuantityModel.setCode(f.getPassengerType() == 1 ? "AHD" : f.getPassengerType() ==2 ? "CHD" : "INF");
+							ptcFareBreakdown.setPassengerTypeQuantity(passengerTypeQuantityModel);
+
+							// mapping PassengerFareModel
+							PassengerFareModel passengerFareModel = new PassengerFareModel();
+							// mapping totalFare
+							FareModel totalFare = new FareModel();
+							totalFare.setAmount(Double.toString(f.getTotalFare()));
+							totalFare.setCurrencyCode(f.getCurrency());
+							totalFare.setDecimalPlaces(2);
+							// mapping baseFare
+							FareModel baseFare = new FareModel();
+							baseFare.setAmount(Double.toString(f.getBaseFare()));
+							baseFare.setCurrencyCode(f.getCurrency());
+							baseFare.setDecimalPlaces(2);
+
+							// mapping tax
+							FareModel tax = new FareModel();
+							tax.setAmount(Double.toString(f.getTax()));
+							tax.setCurrencyCode(f.getCurrency());
+							tax.setDecimalPlaces(2);
+
+							passengerFareModel.setTotalFare(totalFare);
+							passengerFareModel.setBaseFare(baseFare);
+							passengerFareModel.setTax(tax);
+							ptcFareBreakdown.setPassengerFare(passengerFareModel);
+							ptcFareBreakdowns.add(ptcFareBreakdown);
+
+						});
+						/*
+						 * End mapping PTCFareBreakdownModel
+						 */
+						
+						/*
+						 * Start mapping ItinTotalFareModel
+						 */
+						ItinTotalFareModel itinTotalFare = new ItinTotalFareModel();
+						if(i.getFare()!= null) {
+							// mapping totalFare
+							FareModel totalFare = new FareModel();
+							totalFare.setAmount(Double.toString(i.getFare().getTotalFare()));
+							totalFare.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
+							totalFare.setDecimalPlaces(2);
+							// mapping baseFare
+							FareModel baseFare = new FareModel();
+							baseFare.setAmount(Double.toString(i.getFare().getBaseFare()));
+							baseFare.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
+							baseFare.setDecimalPlaces(2);
+
+							// mapping tax
+							FareModel tax = new FareModel();
+							tax.setAmount(Double.toString(i.getFare().getTax()));
+							tax.setCurrencyCode(i.getFare().getAgentPreferredCurrency());
+							tax.setDecimalPlaces(2);
+							itinTotalFare.setBaseFare(baseFare);
+							itinTotalFare.setTotaleFare((float) i.getFare().getTotalFare());
+							itinTotalFare.setTotalFare(totalFare);
+							itinTotalFare.setTotalTax(tax);
+							
+
+						}
+						airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
+						airIt.setItinTotalFare(itinTotalFare);
+
+						
+						System.out.println("--------------------->" + airIt.getFareType());
+						System.out.println("--------------------->" + airIt.getIsRefundable());
+
+						result.setAirItineraryPricingInfo(airIt);
+
+						List<OriginDestinationOptionModel> OriginList = new ArrayList<>();
+
+						i.getSegments().forEach(j -> {
+							List<FlightSegmentModel> flightSegments = new ArrayList<>();
+
+							j.forEach(k -> {
+
+								FlightSegmentModel flightSegment1 = new FlightSegmentModel();
+
+								flightSegment1.setCabinClassCode(k.getCabinClass());
+								System.out.println("--------------------->" + flightSegment1.getCabinClassCode());
+
+								flightSegment1.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
+								flightSegment1.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
+								flightSegment1.setEticket(k.iseTicketEligible());
+
+								flightSegment1.setFligthDuration(k.getDuration());
+								flightSegment1.setIsStop(k.isStopOver());
+								flightSegment1.setStopQuantity(k.getStops());
+								flightSegment1.setBaggage(k.getIncludedBaggage());
+								flightSegment1.setAirlinePnr(String.valueOf(k.getAirlinePNR()));
+								flightSegment1.setArrivalAirportLocationCode(k.getDestination().getAirportCode());
+								flightSegment1.setArrivalAirportLocation(k.getDestination().getAirportName());
+								flightSegment1.setDepartureAirportLocationCode(k.getOrigin().getAirportCode());
+								flightSegment1.setDepartureAirportLocation(k.getOrigin().getAirportName());
+								flightSegment1.setFlightNumber(k.getAirlineDetails().getFlightNumber());
+								flightSegment1.setAirlineReservationCode(k.getAirlineDetails().getAirlineCode());
+								flightSegment1.setMarketingAirline(k.getAirlineDetails().getAirlineName());
+								flightSegment1.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
+								flightSegment1.setCabinClassText(k.getCabinClass());
+								flightSegment1.setSeat(k.getCabinBaggage());
+
+								flightSegments.add(flightSegment1);
+								
+								
+								
+								FlightSegmentModel flightSegment2 = new FlightSegmentModel();
+
+								flightSegment1.setCabinClassCode(k.getCabinClass());
+								System.out.println("--------------------->" + flightSegment2.getCabinClassCode());
+
+								flightSegment2.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
+								flightSegment2.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
+								flightSegment2.setEticket(k.iseTicketEligible());
+
+								flightSegment2.setFligthDuration(k.getDuration());
+								flightSegment2.setIsStop(k.isStopOver());
+								flightSegment2.setStopQuantity(k.getStops());
+								flightSegment2.setBaggage(k.getIncludedBaggage());
+								flightSegment2.setAirlinePnr(String.valueOf(k.getAirlinePNR()));
+								flightSegment2.setArrivalAirportLocationCode(k.getDestination().getAirportCode());
+								flightSegment2.setArrivalAirportLocation(k.getDestination().getAirportName());
+								flightSegment2.setDepartureAirportLocationCode(k.getOrigin().getAirportCode());
+								flightSegment2.setDepartureAirportLocation(k.getOrigin().getAirportName());
+								flightSegment2.setFlightNumber(k.getAirlineDetails().getFlightNumber());
+								flightSegment2.setAirlineReservationCode(k.getAirlineDetails().getAirlineCode());
+								flightSegment2.setMarketingAirline(k.getAirlineDetails().getAirlineName());
+								flightSegment2.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
+								flightSegment2.setCabinClassText(k.getCabinClass());
+								flightSegment2.setSeat(k.getCabinBaggage());
+
+								flightSegments.add(flightSegment2);
+
+							});
+
+							OriginDestinationOptionModel Origin = new OriginDestinationOptionModel();
+							Origin.setFlightSegment(flightSegments);
+
+							OriginList.add(Origin);
+
+						});
+
+						result.setOriginDestinationOptions(OriginList);
+
+						pricedItineraryModels.add(result);
+						response.setPricedItineraries(pricedItineraryModels);
+					});
+				});
+			}
+			
 
 		}
 
