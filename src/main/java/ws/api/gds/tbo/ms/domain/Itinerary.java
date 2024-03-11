@@ -10,7 +10,10 @@ public class Itinerary {
     private boolean isHoldEligibleForLcc;
     @JsonProperty("Segments") 
     private ArrayList<Segments> segments;
-    
+    @JsonProperty("Passenger") 
+    private ArrayList<Passenger> passenger;
+    @JsonProperty("FareRules") 
+    private ArrayList<FareRule> fareRules;
     @JsonProperty("ValidatingAirlineCode") 
     private String validatingAirlineCode;
     @JsonProperty("ResponseTime") 
@@ -51,6 +54,16 @@ public class Itinerary {
     private String endUserBrowserAgent;
     @JsonProperty("UserData") 
     private String userData;
+    
+    
+    
+    @JsonProperty("Ticketed") 
+    private boolean ticketed;
+    @JsonProperty("AirlineCode") 
+    private Object airlineCode;
+    @JsonProperty("PNR") 
+    private String pNR;
+    
     
     
 	public Itinerary() {
@@ -306,6 +319,57 @@ public class Itinerary {
 
 	public void setUserData(String userData) {
 		this.userData = userData;
+	}
+	
+	
+
+	public ArrayList<Passenger> getPassenger() {
+		return passenger;
+	}
+
+
+	public void setPassenger(ArrayList<Passenger> passenger) {
+		this.passenger = passenger;
+	}
+
+
+	public ArrayList<FareRule> getFareRules() {
+		return fareRules;
+	}
+
+
+	public void setFareRules(ArrayList<FareRule> fareRules) {
+		this.fareRules = fareRules;
+	}
+
+
+	public boolean isTicketed() {
+		return ticketed;
+	}
+
+
+	public void setTicketed(boolean ticketed) {
+		this.ticketed = ticketed;
+	}
+
+
+	public Object getAirlineCode() {
+		return airlineCode;
+	}
+
+
+	public void setAirlineCode(Object airlineCode) {
+		this.airlineCode = airlineCode;
+	}
+
+
+	public String getpNR() {
+		return pNR;
+	}
+
+
+	public void setpNR(String pNR) {
+		this.pNR = pNR;
 	}
 
 
