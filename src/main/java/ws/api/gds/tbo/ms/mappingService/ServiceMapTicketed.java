@@ -1,6 +1,7 @@
 package ws.api.gds.tbo.ms.mappingService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ws.api.gds.tbo.ms.domain.AirlineDetails;
 import ws.api.gds.tbo.ms.domain.Destination;
@@ -8,9 +9,20 @@ import ws.api.gds.tbo.ms.domain.FareRule;
 import ws.api.gds.tbo.ms.domain.Origin;
 import ws.api.gds.tbo.ms.domain.Passenger;
 import ws.api.gds.tbo.ms.domain.Segments;
+import ws.api.gds.tbo.ms.domain.Ticket;
 import ws.api.gds.tbo.ms.domain.TicketRequest;
 import ws.api.gds.tbo.ms.domain.TicketResponse;
+import ws.api.gds.tbo.ms.model.BaggageInfoModel;
+import ws.api.gds.tbo.ms.model.ErrorModel;
+import ws.api.gds.tbo.ms.model.FareRuleModel;
+import ws.api.gds.tbo.ms.model.FareRulesResponseModel;
 import ws.api.gds.tbo.ms.model.FlightBookingModel;
+import ws.api.gds.tbo.ms.model.FlightSegmentModel;
+import ws.api.gds.tbo.ms.model.OperatingAirlineModel;
+import ws.api.gds.tbo.ms.model.OriginDestinationOptionModel;
+import ws.api.gds.tbo.ms.model.PassengerFlightBookingModel;
+import ws.api.gds.tbo.ms.model.RuleDetailModel;
+import ws.api.gds.tbo.ms.model.SeatsRemainingModel;
 import ws.api.gds.tbo.ms.model.TripDetailsResponseModel;
 
 public class ServiceMapTicketed {
@@ -284,9 +296,176 @@ public class ServiceMapTicketed {
 		return request;
 	}
 
-	public TripDetailsResponseModel TicketRS(TicketResponse responseT, FlightBookingModel model) {
-		// TODO Auto-generated method stub
-		return null;
+	public TripDetailsResponseModel TicketRS(TicketResponse responseGds, FlightBookingModel model) {
+		if (responseGds!=null) {
+			TripDetailsResponseModel response=new TripDetailsResponseModel();
+			List<OriginDestinationOptionModel> originList = new ArrayList<>();
+			OriginDestinationOptionModel origin= new OriginDestinationOptionModel();
+			//Status
+			//ChangeInItinerary
+			response.setSuccess(responseGds.isSuccess());
+			response.setOfficeIdPnr(responseGds.getpNR());
+			
+			
+			if (response.getSuccess() == false) {
+
+				List<ErrorModel> errors = new ArrayList<>();
+
+				responseGds.getErrors().forEach(el -> {
+					ErrorModel error = new ErrorModel();
+					error.setCode(el.getErrorCode().toString());
+					error.setMessage(el.getErrorMessage());
+					errors.add(error);
+				});
+				response.setErrors(errors);
+			}
+			if (response.getErrors() != null) {
+				System.out.println(response.getErrors().get(0).getMessage());
+
+			} else {
+				System.out.println("the error list is Null !! ");
+			}
+			
+			
+			if (responseGds.getItinerary() != null) {
+			response.getFlightBooking().getPricedItinerary().getOriginDestinationOptions().get(0).getFlightSegment().get(0).setAirlinePnr(responseGds.getpNR());
+			response.getFlightBooking().getPricedItinerary().getOriginDestinationOptions().get(0).getFlightSegment().get(0).setArrivalAirportLocationCode(responseGds.getItinerary().getDestination());
+			response.getFlightBooking().getPricedItinerary().getOriginDestinationOptions().get(0).getFlightSegment().get(0).setDepartureAirportLocationCode(responseGds.getItinerary().getOrigin());
+			response.getFlightBooking().getPricedItinerary().getOriginDestinationOptions().get(0).getFlightSegment().get(0).setMarketingAirlineCode(responseGds.getItinerary().getValidatingAirlineCode());
+			//Ticketed Mapping		
+			if (responseGds.getItinerary().isLcc() == true) {
+				response.getFlightBooking().getPricedItinerary().getAirItineraryPricingInfo().setFareType("Basic");
+			} else {
+				response.getFlightBooking().getPricedItinerary().getAirItineraryPricingInfo().setFareType("GDS");
+
+			}
+
+			if (responseGds.getItinerary().isNonRefundable() == true) {
+				response.getFlightBooking().getPricedItinerary().getAirItineraryPricingInfo().setIsRefundable("N");
+			} else {
+				response.getFlightBooking().getPricedItinerary().getAirItineraryPricingInfo().setIsRefundable("O");
+
+			}
+			
+			List<FlightSegmentModel> flightSegments = new ArrayList<>();
+			responseGds.getItinerary().getSegments().forEach(s->{
+				FlightSegmentModel flightSegment = new FlightSegmentModel();
+				flightSegment.setAirlinePnr(s.getAirlinePNR());
+				flightSegment.setArrivalAirportLocationCode(s.getDestination().getAirportCode());
+				flightSegment.setArrivalAirportLocation(s.getDestination().getAirportName());
+				flightSegment.setDepartureAirportLocationCode(s.getOrigin().getAirportCode());
+				flightSegment.setDepartureAirportLocation(s.getAirlineName());
+				flightSegment.setFlightNumber(s.getFlightNumber());
+				flightSegment.setEticket(s.iseTicketEligible());
+				flightSegment.setStopQuantity(s.getStops());
+				flightSegment.setBaggage(s.getIncludedBaggage());
+				flightSegment.setCabinClassCode(s.getBookingClass());
+				flightSegment.setCabinClassText(s.getCabinClass());
+				flightSegment.setMarketingAirline(s.getAirlineName());
+				
+				
+				SeatsRemainingModel seat =new SeatsRemainingModel();
+				seat.setNumber(s.getNoOfSeatAvailable());
+				flightSegment.setSeatsRemaining(seat);
+				
+				OperatingAirlineModel operating=new OperatingAirlineModel();
+				operating.setCode(s.getOperatingCarrier());
+				flightSegment.setOperatingAirline(operating);
+				
+				
+				List<PassengerFlightBookingModel> passengerList  = new ArrayList<>();
+				if(responseGds.getItinerary().getPassenger()!=null) {
+					responseGds.getItinerary().getPassenger().forEach(p->{
+						PassengerFlightBookingModel passenger = new PassengerFlightBookingModel();
+						passenger.setPassengerTitle(p.getTitle());
+						passenger.setFirstName(p.getFirstName());
+						passenger.setLastName(p.getLastName());
+						passenger.setTel(p.getMobile1());
+						passenger.setCountryTel(p.getMobile1CountryCode());
+						//isLeadPax
+						//type
+						passenger.setPassportNumber(p.getPassportNo());
+						passenger.setMail(p.getEmail());
+						//Fare mapping 
+						
+						//Ticket Mapping
+						
+						passengerList.add(passenger);
+					});
+					
+					
+					
+					
+					response.getFlightBooking().setAdults(passengerList);					
+			
+				}else {
+					System.out.println("Passenger List is null");
+				}
+				
+				
+				
+				List<FareRulesResponseModel> fareRules  = new ArrayList<>();
+				if(responseGds.getItinerary().getFareRules()!=null) {
+					List<BaggageInfoModel> infoList  = new ArrayList<>();
+					List<FareRuleModel> fareRuleMList  = new ArrayList<>();
+					List<RuleDetailModel> ruleDetail  = new ArrayList<>();
+
+					responseGds.getItinerary().getFareRules().forEach(f->{
+						FareRulesResponseModel fareRule=new FareRulesResponseModel();
+						
+						BaggageInfoModel info=new BaggageInfoModel();
+						info.setDeparture(f.getOrigin());
+						info.setArrival(f.getDestination());
+						info.setAireline(f.getAirline());
+						info.setFlightNo(f.getFlightNumber());
+						infoList.add(info);
+						
+						
+
+						FareRuleModel fRule=new FareRuleModel();
+						fRule.setFareBasis(f.getFareBasisCode());
+						RuleDetailModel rule=new RuleDetailModel();
+						rule.setRules(f.getFareRuleDetail());
+						ruleDetail.add(rule);
+						fRule.setRuleDetails(ruleDetail);
+						
+						fareRule.setBaggageInfos(infoList);
+						fareRule.setFareRules(fareRuleMList);
+						
+						fareRules.add(fareRule);
+					});
+					
+					response.getFlightBooking().setFareRules(fareRules);
+					
+				}else {
+					System.out.println("FareRules List is null");
+
+				}
+
+				
+				
+				flightSegments.add(flightSegment);
+			});
+			
+			origin.setFlightSegment(flightSegments);
+			originList.add(origin);
+			response.getFlightBooking().getPricedItinerary().setOriginDestinationOptions(originList);
+			
+			
+			}else {
+				System.out.println("Itinerary is null!!!");
+			}
+			
+			
+			
+			return response;
+		}else {
+			System.out.println("the ticket GDS response is null !!");
+			return null;
+
+		}
+		
+
 	}
 
 }
