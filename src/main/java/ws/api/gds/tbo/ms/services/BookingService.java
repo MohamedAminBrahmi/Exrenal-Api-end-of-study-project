@@ -57,7 +57,7 @@ public class BookingService {
 			System.out.println(request);
 			TicketResponse res= new TicketResponse();
 
-			TicketResponse responseT=microserviceT.postRequest(request,res,"https://xmloutbookingapi.tboair.com/api/v1/Booking/Book");
+			TicketResponse responseT=microserviceT.postRequest(request,res,"http://xmloutbookingapi.tboair.com/api/v1/Booking/Ticket");
 			
 			if(responseT!=null) {
 				TripDetailsResponseModel response= serviceMapTicketed.TicketRS(responseT,model);
