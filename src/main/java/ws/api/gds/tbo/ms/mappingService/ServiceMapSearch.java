@@ -137,7 +137,7 @@ public class ServiceMapSearch {
 			}
 			;
 
-		}
+		
 		;
 		if (responseGds.getResults() != null || !responseGds.getResults().isEmpty()) {
 
@@ -238,6 +238,11 @@ public class ServiceMapSearch {
 						
 
 					}
+					
+					
+					/*
+					 * end mapping ItinTotalFareModel
+					 */
 					airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
 					airIt.setItinTotalFare(itinTotalFare);
 
@@ -297,6 +302,7 @@ public class ServiceMapSearch {
 				});
 			});
 
+		}
 		}
 
 		return response;
