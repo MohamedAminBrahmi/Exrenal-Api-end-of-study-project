@@ -16,7 +16,7 @@ public class ServiceMapAuth {
 			request.setUserName(gds.getLogin());
 			request.setPassword(gds.getPassword());
 			request.setBookingMode("API");
-			request.setiPAddress("192.16910. 22");
+			request.setiPAddress("192.16910. 22"); 
 			System.out.println(request);
 
 			return request;

@@ -37,17 +37,18 @@ public class ServiceMapFareQuote {
 	
 	
 	public AirRevalidateResponseModel FareQuoteRS(FareQuoteResponse responseGds,PricedItineraryModel model) {
-		AirRevalidateResponseModel response= new AirRevalidateResponseModel();
-		
-		
-		//mapping des 'fiels' principaux
-		
-		response.setSuccess(responseGds.isSuccess());
-		response.setDepartureCity(responseGds.getResult().get(0).getOrigin());
-		response.setDestinationCity(responseGds.getResult().get(0).getDestination());
 		
 		
 		if(responseGds != null) {	
+			AirRevalidateResponseModel response= new AirRevalidateResponseModel();
+			
+			
+			//mapping des 'fiels' principaux
+			
+			response.setSuccess(responseGds.isSuccess());
+			response.setDepartureCity(responseGds.getResult().get(0).getOrigin());
+			response.setDestinationCity(responseGds.getResult().get(0).getDestination());
+			
 			System.out.println(response.getSuccess());
 			if (response.getSuccess()==false) {
 				
@@ -68,7 +69,7 @@ public class ServiceMapFareQuote {
 						System.out.println("the error list is Null !! ");
 					};
 				
-			};
+			
 			
 			
 			if(responseGds.getResult()!=null || !responseGds.getResult().isEmpty()) {
@@ -179,6 +180,9 @@ public class ServiceMapFareQuote {
 		
 		
 		return response;
+		}else {
+			return null;
+		}
 	}
 
 }

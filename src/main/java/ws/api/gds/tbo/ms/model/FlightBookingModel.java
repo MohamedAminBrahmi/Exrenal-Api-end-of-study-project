@@ -63,6 +63,12 @@ public class FlightBookingModel {
 	
 	private char typeVol;
 	private GdsSessionModel gdsModel;
+	
+	//for TBO air
+	private String resultId;
+	private String trackingId;
+	private List<FareRulesResponseModel> fareRules;
+
 
 	public FlightBookingModel(List<PassengerFlightBookingModel> adults, List<PassengerFlightBookingModel> childs,
 			List<PassengerFlightBookingModel> infants) {
@@ -597,6 +603,32 @@ public class FlightBookingModel {
 	public void setGdsModel(GdsSessionModel gdsModel) {
 		this.gdsModel = gdsModel;
 	}
+
+	public String getResultId() {
+		return resultId;
+	}
+
+	public void setResultId(String resultId) {
+		this.resultId = resultId;
+	}
+
+	public String getTrackingId() {
+		return trackingId;
+	}
+
+	public void setTrackingId(String trackingId) {
+		this.trackingId = trackingId;
+	}
+
+	public List<FareRulesResponseModel> getFareRules() {
+		return fareRules;
+	}
+
+	public void setFareRules(List<FareRulesResponseModel> fareRules) {
+		this.fareRules = fareRules;
+	}
+	
+	
 	
 	
 }

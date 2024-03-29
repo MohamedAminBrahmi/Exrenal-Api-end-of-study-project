@@ -33,10 +33,11 @@ public class ServiceMapFareRules {
 	}
 
 	public FareRulesResponseModel FareRulesRS(FareRulesResponse responseGds, PricedItineraryModel model) {
-		FareRulesResponseModel response =new FareRulesResponseModel();
-		
-		response.setSuccess(responseGds.isSuccess());		
+			
 		if(responseGds != null) {	
+			FareRulesResponseModel response =new FareRulesResponseModel();
+			
+			response.setSuccess(responseGds.isSuccess());	
 			System.out.println(response.getSuccess());
 			if (response.getSuccess()==false) {
 				
@@ -49,7 +50,7 @@ public class ServiceMapFareRules {
 					errors.add(error);
 				});
 				response.setErrors(errors);
-			}
+			
 				if (response.getErrors() != null) {
 					System.out.println(response.getErrors().get(0).getMessage());
  
@@ -106,5 +107,9 @@ public class ServiceMapFareRules {
 				System.out.println("fare rules array is null !!!");
 			}
 			return response;
+		}else {
+			return null;
+		}
 	}
+		
 }
