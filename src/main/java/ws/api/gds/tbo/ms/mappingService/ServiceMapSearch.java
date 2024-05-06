@@ -452,10 +452,17 @@ public class ServiceMapSearch {
 								flightSegment1.setCabinClassCode(k.getCabinClass());
 								System.out.println("--------------------->" + flightSegment1.getCabinClassCode());
 
-								flightSegment1.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
-								flightSegment1.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
+								flightSegment1.setArrivalDateTime(String.valueOf(k.getArrivalDateTime()));
+								flightSegment1.setDepartureDateTime(String.valueOf(k.getDepartureDateTime()));
+								flightSegment1.setDepartureTimeModel(k.getDepartureTime());
+								flightSegment1.setArrivalTimeModel(k.getArrivalTime());
+								flightSegment1.setDepartureDateModel(String.valueOf(k.getDepartureDate()));
+								flightSegment1.setArrivalDateModel(String.valueOf(k.getArrivalDate()));
+								
+								
+								
 								flightSegment1.setEticket(k.iseTicketEligible());
-
+								
 								flightSegment1.setFligthDuration(k.getDuration());
 								flightSegment1.setIsStop(k.isStopOver());
 								flightSegment1.setStopQuantity(k.getStops());
@@ -470,7 +477,10 @@ public class ServiceMapSearch {
 								flightSegment1.setMarketingAirline(k.getAirlineDetails().getAirlineName());
 								flightSegment1.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
 								flightSegment1.setCabinClassText(k.getCabinClass());
+								flightSegment1.setCabinClassCode(k.getCabinClass());
 								flightSegment1.setSeat(k.getCabinBaggage());
+								flightSegment1.setStopoverTime(String.valueOf(k.getStops()));
+								flightSegment1.setJourneyDuration(Integer.valueOf(k.getDuration()));
 
 								flightSegments.add(flightSegment1);
 								
@@ -478,13 +488,20 @@ public class ServiceMapSearch {
 								
 								FlightSegmentModel flightSegment2 = new FlightSegmentModel();
 
-								flightSegment1.setCabinClassCode(k.getCabinClass());
+								flightSegment2.setCabinClassCode(k.getCabinClass());
 								System.out.println("--------------------->" + flightSegment2.getCabinClassCode());
 
-								flightSegment2.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
-								flightSegment2.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
+								flightSegment2.setArrivalDateTime(String.valueOf(k.getArrivalDateTime()));
+								flightSegment2.setDepartureDateTime(String.valueOf(k.getDepartureDateTime()));
+								flightSegment2.setDepartureTimeModel(k.getDepartureTime());
+								flightSegment2.setArrivalTimeModel(k.getArrivalTime());
+								flightSegment2.setDepartureDateModel(String.valueOf(k.getDepartureDate()));
+								flightSegment2.setArrivalDateModel(String.valueOf(k.getArrivalDate()));
+								
+								
+								
 								flightSegment2.setEticket(k.iseTicketEligible());
-
+								
 								flightSegment2.setFligthDuration(k.getDuration());
 								flightSegment2.setIsStop(k.isStopOver());
 								flightSegment2.setStopQuantity(k.getStops());
@@ -499,7 +516,10 @@ public class ServiceMapSearch {
 								flightSegment2.setMarketingAirline(k.getAirlineDetails().getAirlineName());
 								flightSegment2.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
 								flightSegment2.setCabinClassText(k.getCabinClass());
+								flightSegment2.setCabinClassCode(k.getCabinClass());
 								flightSegment2.setSeat(k.getCabinBaggage());
+								flightSegment2.setStopoverTime(String.valueOf(k.getStops()));
+								flightSegment2.setJourneyDuration(Integer.valueOf(k.getDuration()));
 
 								flightSegments.add(flightSegment2);
 
