@@ -291,10 +291,12 @@ public class ServiceMapSearch {
 
 								flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalDateTime()));
 								flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureDateTime()));
-								flightSegment.setDepartureTimeModel(k.getDepartureTime());
-								flightSegment.setArrivalTimeModel(k.getArrivalTime().substring(12, k.getArrivalTime().length()));
-								flightSegment.setDepartureDateModel(k.getDepartureTime().substring(12, k.getDepartureTime().length()));
+								
+								flightSegment.setDepartureDateModel(k.getDepartureTime().substring(0, Math.min(k.getArrivalTime().length(), 10)));
+								flightSegment.setDepartureTimeModel(k.getDepartureTime().substring(11, k.getDepartureTime().length()));
+								
 								flightSegment.setArrivalDateModel(k.getArrivalTime().substring(0, Math.min(k.getArrivalTime().length(), 10)));
+								flightSegment.setArrivalTimeModel(k.getArrivalTime().substring(11, k.getArrivalTime().length()));
 								
 								
 								
