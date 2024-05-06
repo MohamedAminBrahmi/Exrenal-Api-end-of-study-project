@@ -306,8 +306,12 @@ public class ServiceMapSearch {
 								flightSegment.setBaggage(k.getIncludedBaggage());
 								flightSegment.setAirlinePnr(String.valueOf(k.getAirlinePNR()));
 								flightSegment.setArrivalAirportLocationCode(k.getDestination().getAirportCode());
+								System.out.println("name "+k.getDestination().getAirportName());
+								System.out.println("code "+k.getDestination().getAirportCode());
+
 								flightSegment.setArrivalAirportLocation(k.getDestination().getAirportName());
-								flightSegment.setDepartureAirportLocationCode(k.getOrigin().getAirportCode());
+								flightSegment.setDepartureAirportLocationCode(k.getDestination().getAirportCode());
+								
 								flightSegment.setDepartureAirportLocation(k.getOrigin().getAirportName());
 								flightSegment.setFlightNumber(k.getAirlineDetails().getFlightNumber());
 								flightSegment.setAirlineReservationCode(k.getAirlineDetails().getAirlineCode());
@@ -317,7 +321,8 @@ public class ServiceMapSearch {
 								flightSegment.setCabinClassCode(k.getCabinClass());
 								flightSegment.setSeat(k.getCabinBaggage());
 								flightSegment.setStopoverTime(String.valueOf(k.getStops()));
-								flightSegment.setJourneyDuration(Integer.valueOf(k.getDuration()));
+								//flightSegment.setJourneyDuration(Integer.valueOf(k.getDuration()));
+								flightSegments.add(flightSegment);
 								
 							});
 
@@ -325,6 +330,7 @@ public class ServiceMapSearch {
 							Origin.setFlightSegment(flightSegments);
 
 							OriginList.add(Origin);
+							System.out.println(Origin.toString());
 
 						});
 
