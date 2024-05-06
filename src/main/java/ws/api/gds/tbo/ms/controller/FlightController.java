@@ -1,5 +1,7 @@
 package ws.api.gds.tbo.ms.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +61,7 @@ public class FlightController {
 	}
 
 	@PostMapping("/availability")
-	public ResponseEntity<AirLowFareSearchResultModel> searchMeth(@RequestBody FlightSearchModel model) {
+	public ResponseEntity<AirLowFareSearchResultModel> searchMeth(@RequestBody FlightSearchModel model) throws IOException {
 		System.out.println("model==> "+model.toString());
 		AirLowFareSearchResultModel result = searchService.search(model);
 		if (result != null) {
@@ -89,7 +91,7 @@ public class FlightController {
 
 	}
 
-	@PostMapping("/fareRules")
+	@PostMapping("/fare-rules")
 	public ResponseEntity<FareRulesResponseModel> fareRulesMeth(@RequestBody PricedItineraryModel model) {
 		FareRulesResponseModel result = fareRulesService.fareRules(model);
 		if (result != null) {

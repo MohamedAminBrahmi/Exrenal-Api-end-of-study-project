@@ -1,6 +1,7 @@
 package ws.api.gds.tbo.ms.mappingService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -158,6 +159,7 @@ public class ServiceMapSearch {
 						result.setCodeGds(model.getGdsModel().getCodeGds());
 						result.setIdGds(model.getGdsModel().getIdGds());
 						result.setOfficeId(model.getGdsModel().getOfficeId());
+						result.setGdsModel(model.getGdsModel());
 						result.setCabinClass(r.get(0).getSegments().get(0).get(0).getCabinClass().charAt(0));
 						String baggage=r.get(0).getSegments().get(0).get(0).getIncludedBaggage();
 						if(baggage != null) {
@@ -182,6 +184,7 @@ public class ServiceMapSearch {
 							airIt.setFareType("GDS");
 
 						}
+						System.out.println("airIt fareType "+airIt.getFareType());
 
 						if (i.isNonRefundable() == true) {
 							airIt.setIsRefundable("N");
@@ -262,13 +265,14 @@ public class ServiceMapSearch {
 						}
 						airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
 						airIt.setItinTotalFare(itinTotalFare);
+						System.out.println("itinTotalFare "+itinTotalFare.toString());
 						
 						
 						System.out.println("--------------------->" + airIt.getFareType());
 						System.out.println("--------------------->" + airIt.getIsRefundable());
 
-						result.setAirItineraryPricingInfo(airIt);
-
+						result.setAirItineraryPricingInfos( Arrays.asList(airIt) );
+						System.out.println("airIt "+result.getAirItineraryPricingInfos());
 						List<OriginDestinationOptionModel> OriginList = new ArrayList<>();
 
 						i.getSegments().forEach(j -> {
@@ -289,8 +293,8 @@ public class ServiceMapSearch {
 								flightSegment.setCabinClassCode(k.getCabinClass());
 								System.out.println("--------------------->" + flightSegment.getCabinClassCode());
 
-								flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalDateTime()));
-								flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureDateTime()));
+								flightSegment.setArrivalDateTime( k.getArrivalTime());
+								flightSegment.setDepartureDateTime( k.getDepartureTime());
 								
 								flightSegment.setDepartureDateModel(k.getDepartureTime().substring(0, Math.min(k.getArrivalTime().length(), 10)));
 								flightSegment.setDepartureTimeModel(k.getDepartureTime().substring(11, k.getDepartureTime().length()));

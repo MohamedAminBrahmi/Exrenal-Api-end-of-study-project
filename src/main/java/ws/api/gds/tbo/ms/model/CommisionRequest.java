@@ -5,19 +5,31 @@ import java.util.List;
 
 
 
-public class CommisionModelResponse {
+public class CommisionRequest {
+	private GdsSessionModel gds;
 	private List<PricedItineraryModel> pricedItineraries;
 	private PricedItineraryModel pricedItinerary;
 	private PricerCalendarCase tableauEntier[][];
 
-	public CommisionModelResponse() {
+	public CommisionRequest() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public CommisionModelResponse(List<PricedItineraryModel> pricedItineraries, PricedItineraryModel pricedItinerary) {
+	public CommisionRequest(GdsSessionModel gds, List<PricedItineraryModel> pricedItineraries,
+			PricedItineraryModel pricedItinerary) {
 		super();
+		this.gds = gds;
 		this.pricedItineraries = pricedItineraries;
 		this.pricedItinerary = pricedItinerary;
+	}
+
+	public GdsSessionModel getGds() {
+		return gds;
+	}
+
+	public void setGds(GdsSessionModel gds) {
+		this.gds = gds;
 	}
 
 	public List<PricedItineraryModel> getPricedItineraries() {
@@ -46,10 +58,11 @@ public class CommisionModelResponse {
 
 	@Override
 	public String toString() {
-		return "CommisionModelResponse [pricedItineraries=" + pricedItineraries + ", pricedItinerary=" + pricedItinerary
-				+ ", tableauEntier=" + Arrays.toString(tableauEntier) + "]";
+		return "CommisionRequest [gds=" + gds + ", pricedItineraries=" + pricedItineraries + ", pricedItinerary="
+				+ pricedItinerary + ", tableauEntier=" + Arrays.toString(tableauEntier) + "]";
 	}
 
 	
-
+	
+	
 }
