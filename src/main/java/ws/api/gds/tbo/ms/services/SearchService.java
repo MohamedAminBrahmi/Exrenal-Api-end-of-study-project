@@ -24,7 +24,7 @@ public class SearchService {
 		System.out.println(request);
 		SearchResponse res = new SearchResponse();
 
-		SearchResponse responseT = microservice.postRequest(request, res,model.getGdsModel().getUrl()+"api/v1/Search/Search");
+		SearchResponse responseT = microservice.postRequest(request, res,model.getGdsModel().getUrl()+"/api/v1/Search/Search");
 		if(responseT!=null) {
 			AirLowFareSearchResultModel response = serviceMapSearch.SearchRS(responseT, model);
 			System.out.println(response);

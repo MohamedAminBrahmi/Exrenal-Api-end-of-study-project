@@ -3,6 +3,8 @@ package ws.api.gds.tbo.ms.mappingService;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import ws.api.gds.tbo.ms.domain.AirlineDetails;
 import ws.api.gds.tbo.ms.domain.Destination;
 import ws.api.gds.tbo.ms.domain.FareRule;
@@ -25,6 +27,7 @@ import ws.api.gds.tbo.ms.model.RuleDetailModel;
 import ws.api.gds.tbo.ms.model.SeatsRemainingModel;
 import ws.api.gds.tbo.ms.model.TripDetailsResponseModel;
 
+@Service
 public class ServiceMapTicketed {
 
 	public TicketRequest TicketRQ(FlightBookingModel model) {

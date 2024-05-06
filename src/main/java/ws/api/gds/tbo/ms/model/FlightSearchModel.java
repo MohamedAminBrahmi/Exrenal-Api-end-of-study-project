@@ -311,25 +311,6 @@ public class FlightSearchModel {
 		this.typeSearch = typeSearch;
 	}
 
-	@Override
-	public String toString() {
-		return "FlightSearchModel [departVol1=" + departVol1 + ", destinationVol1=" + destinationVol1 + ", departVol2="
-				+ departVol2 + ", destinationVol2=" + destinationVol2 + ", departVol3=" + departVol3
-				+ ", destinationVol3=" + destinationVol3 + ", departleVol1=" + departleVol1 + ", departleVol2="
-				+ departleVol2 + ", departleVol3=" + departleVol3 + ", retourleVol1=" + retourleVol1 + ", rangeDepart="
-				+ rangeDepart + ", rangeArriv=" + rangeArriv + ", classe=" + classe + ", airline=" + airline
-				+ ", airlines=" + airlines + ", qteADT=" + qteADT + ", qteCHD=" + qteCHD + ", qteINF=" + qteINF
-				+ ", qteSTU=" + qteSTU + ", qteSRC=" + qteSRC + ", qteSEA=" + qteSEA + ", qteYTH=" + qteYTH + ", gds="
-				+ gds + ", isRefundable=" + isRefundable + ", isResidentFare=" + isResidentFare + ", nearByAirports="
-				+ nearByAirports + ", pricingSourceType=" + pricingSourceType + ", requestOptions=" + requestOptions
-				+ ", sessionId=" + sessionId + ", target=" + target + ", cabinPreference=" + cabinPreference
-				+ ", maxStopsQuantity=" + maxStopsQuantity + ", cabinType=" + cabinType + ", preferenceLevel="
-				+ preferenceLevel + ", TyepSearch=" + typeSearch + ", refundable=" + refundable + ", departVol4="
-				+ departVol4 + ", destinationVol4=" + destinationVol4 + ", departleVol4=" + departleVol4
-				+ ", departVol5=" + departVol5 + ", destinationVol5=" + destinationVol5 + ", departleVol5="
-				+ departleVol5 + ", flightType=" + flightType + "]";
-	}
-
 	public Integer getQteSTU() {
 		return qteSTU;
 	}
@@ -495,6 +476,27 @@ public class FlightSearchModel {
 
 	public void setGdsModel(GdsSessionModel gdsModel) {
 		this.gdsModel = gdsModel;
+	}
+
+	@Override
+	public String toString() {
+		return "FlightSearchModel [departVol1=" + departVol1 + ", destinationVol1=" + destinationVol1 + ", departVol2="
+				+ departVol2 + ", destinationVol2=" + destinationVol2 + ", departVol3=" + departVol3
+				+ ", destinationVol3=" + destinationVol3 + ", departleVol1=" + departleVol1 + ", departleVol2="
+				+ departleVol2 + ", departleVol3=" + departleVol3 + ", retourleVol1=" + retourleVol1 + ", rangeDepart="
+				+ rangeDepart + ", rangeArriv=" + rangeArriv + ", classe=" + classe + ", airline=" + airline
+				+ ", airlines=" + airlines + ", qteADT=" + qteADT + ", qteCHD=" + qteCHD + ", qteINF=" + qteINF
+				+ ", qteSTU=" + qteSTU + ", qteSRC=" + qteSRC + ", qteSEA=" + qteSEA + ", qteYTH=" + qteYTH + ", gds="
+				+ gds + ", isRefundable=" + isRefundable + ", isResidentFare=" + isResidentFare + ", nearByAirports="
+				+ nearByAirports + ", pricingSourceType=" + pricingSourceType + ", requestOptions=" + requestOptions
+				+ ", sessionId=" + sessionId + ", target=" + target + ", cabinPreference=" + cabinPreference
+				+ ", maxStopsQuantity=" + maxStopsQuantity + ", cabinType=" + cabinType + ", preferenceLevel="
+				+ preferenceLevel + ", typeSearch=" + typeSearch + ", refundable=" + refundable + ", departVol4="
+				+ departVol4 + ", destinationVol4=" + destinationVol4 + ", departleVol4=" + departleVol4
+				+ ", departVol5=" + departVol5 + ", destinationVol5=" + destinationVol5 + ", departleVol5="
+				+ departleVol5 + ", flightType=" + flightType + ", baggage=" + baggage + ", codePromo=" + codePromo
+				+ ", preferredAirlines=" + preferredAirlines + ", calender=" + calender + ", gdsModel=" + gdsModel
+				+ "]";
 	}
 	
 	

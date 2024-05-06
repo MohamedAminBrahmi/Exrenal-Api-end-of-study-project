@@ -45,7 +45,12 @@ public class FlightController {
 
 	@PostMapping("/getToken")
 	public ResponseEntity<String> authenticate(@RequestBody GdsSessionModel gds) {
+		System.out.println("login "+gds.getLogin());
+		System.out.println("pwd "+gds.getPassword());
+		
+		System.out.println("url "+gds.getUrl());
 		String result = authService.getToken(gds);
+		System.out.println("result=> "+result);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
@@ -55,6 +60,7 @@ public class FlightController {
 
 	@PostMapping("/availability")
 	public ResponseEntity<AirLowFareSearchResultModel> searchMeth(@RequestBody FlightSearchModel model) {
+		System.out.println("model==> "+model.toString());
 		AirLowFareSearchResultModel result = searchService.search(model);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);

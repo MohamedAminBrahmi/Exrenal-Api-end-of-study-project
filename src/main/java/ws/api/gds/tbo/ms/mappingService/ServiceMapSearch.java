@@ -55,13 +55,13 @@ public class ServiceMapSearch {
 		request.setChildCount(model.getQteCHD());
 		request.setInfantCount(model.getQteINF());
 
-		if (model.getCabinType().equals("C")) {
+		if (model.getClasse().equals("C")) {
 			request.setFlightCabinClass(FlightCabinClass.Business);
-		} else if (model.getCabinType().equals("Y")) {
+		} else if (model.getClasse().equals("Y")) {
 			request.setFlightCabinClass(FlightCabinClass.Economy);
-		} else if (model.getCabinType().equals("W")) {
+		} else if (model.getClasse().equals("W")) {
 			request.setFlightCabinClass(FlightCabinClass.PremiumEconomy);
-		} else if (model.getCabinType().equals("F")) {
+		} else if (model.getClasse().equals("F")) {
 			request.setFlightCabinClass(FlightCabinClass.First);
 		}
 
@@ -119,6 +119,7 @@ public class ServiceMapSearch {
 			response.setNbChd(model.getQteCHD());
 			response.setNbInf(model.getQteINF());
 
+			
 			System.out.println(responseGds.isDomestic());
 			System.out.println(response.getSuccess());
 			if (response.getSuccess() == false) {
@@ -152,7 +153,24 @@ public class ServiceMapSearch {
 
 						PricedItineraryModel result = new PricedItineraryModel();
 						result.setResultId(i.getResultId());
-
+						//neww fieldss******
+						result.setNbStop(r.get(0).getSegments().get(0).get(0).getStops());
+						result.setCodeGds(model.getGdsModel().getCodeGds());
+						result.setIdGds(model.getGdsModel().getIdGds());
+						result.setOfficeId(model.getGdsModel().getOfficeId());
+						result.setCabinClass(r.get(0).getSegments().get(0).get(0).getCabinClass().charAt(0));
+						String baggage=r.get(0).getSegments().get(0).get(0).getIncludedBaggage();
+						if(baggage != null) {
+							result.setBaggageAllowance(true);
+						}else {
+							result.setBaggageAllowance(false);
+						}
+						result.setGdsTimeZone(model.getGdsModel().getGdsTimeZone());
+						result.setGdsNotification(model.getGdsModel().getGdsNotification());
+						result.setGdsDisplayNotif(model.getGdsModel().getDisplayNotif());
+						result.setGdsDevise(model.getGdsModel().getCodeDevise());
+						
+						//****
 						// on a fait le mapping du trackingId dans transactionId
 						result.setTransactionID(responseGds.getTrackingId());
 
@@ -244,7 +262,7 @@ public class ServiceMapSearch {
 						}
 						airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
 						airIt.setItinTotalFare(itinTotalFare);
-
+						
 						
 						System.out.println("--------------------->" + airIt.getFareType());
 						System.out.println("--------------------->" + airIt.getIsRefundable());
@@ -260,13 +278,28 @@ public class ServiceMapSearch {
 
 								FlightSegmentModel flightSegment = new FlightSegmentModel();
 
+								response.setDepartAirelines(k.getAirlineDetails().getAirlineName());
+								response.setDepartAirelinesIata(k.getAirlineDetails().getAirlineCode());
+								
+								response.setDestinationAirelines(k.getAirlineDetails().getAirlineName());
+								response.setDestinationAirelinesIata(k.getAirlineDetails().getAirlineCode());
+
+								
+								
 								flightSegment.setCabinClassCode(k.getCabinClass());
 								System.out.println("--------------------->" + flightSegment.getCabinClassCode());
 
-								flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
-								flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureTime()));
+								flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalDateTime()));
+								flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureDateTime()));
+								flightSegment.setDepartureTimeModel(k.getDepartureTime());
+								flightSegment.setArrivalTimeModel(k.getArrivalTime());
+								flightSegment.setDepartureDateModel(String.valueOf(k.getDepartureDate()));
+								flightSegment.setArrivalDateModel(String.valueOf(k.getArrivalDate()));
+								
+								
+								
 								flightSegment.setEticket(k.iseTicketEligible());
-
+								
 								flightSegment.setFligthDuration(k.getDuration());
 								flightSegment.setIsStop(k.isStopOver());
 								flightSegment.setStopQuantity(k.getStops());
@@ -281,10 +314,11 @@ public class ServiceMapSearch {
 								flightSegment.setMarketingAirline(k.getAirlineDetails().getAirlineName());
 								flightSegment.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
 								flightSegment.setCabinClassText(k.getCabinClass());
+								flightSegment.setCabinClassCode(k.getCabinClass());
 								flightSegment.setSeat(k.getCabinBaggage());
-
-								flightSegments.add(flightSegment);
-
+								flightSegment.setStopoverTime(String.valueOf(k.getStops()));
+								flightSegment.setJourneyDuration(Integer.valueOf(k.getDuration()));
+								
 							});
 
 							OriginDestinationOptionModel Origin = new OriginDestinationOptionModel();
@@ -306,6 +340,7 @@ public class ServiceMapSearch {
 
 						PricedItineraryModel result = new PricedItineraryModel();
 						result.setResultId(i.getResultId());
+						
 
 						// on a fait le mapping du trackingId dans transactionId
 						result.setTransactionID(responseGds.getTrackingId());

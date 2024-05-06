@@ -23,7 +23,7 @@ public class AuthenticationService {
 		AuthenticationResponse response = new AuthenticationResponse();
 
 		AuthenticationResponse responseT = microservice.postRequest(request, response,
-				gds.getUrl() + "api/v1/Authenticate/ValidateAgency");
+				gds.getUrl() + "/api/v1/Authenticate/ValidateAgency");
 		
 		if(responseT!=null) {
 			String token = serviceMapAuth.TokenRS(responseT);
