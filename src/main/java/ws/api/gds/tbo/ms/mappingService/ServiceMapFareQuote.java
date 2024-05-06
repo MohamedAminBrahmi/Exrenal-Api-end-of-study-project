@@ -48,7 +48,7 @@ public class ServiceMapFareQuote {
 			response.setSuccess(responseGds.isSuccess());
 			response.setDepartureCity(responseGds.getResult().get(0).getOrigin());
 			response.setDestinationCity(responseGds.getResult().get(0).getDestination());
-			
+			response.setAirelines(responseGds.getResult().get(0).getSegments().get(0).get(0).getAirlineDetails().getAirlineName());
 			System.out.println(response.getSuccess());
 			if (response.getSuccess()==false) {
 				
@@ -84,7 +84,25 @@ public class ServiceMapFareQuote {
 						//on a fait le mapping du trackingId dans transactionId
 						result.setTransactionID(responseGds.getTrackingId());
 						
-
+						//neww fieldss******
+						result.setNbStop(r.getSegments().get(0).get(0).getStops());
+						result.setCodeGds(model.getGdsModel().getCodeGds());
+						result.setIdGds(model.getGdsModel().getIdGds());
+						result.setOfficeId(model.getGdsModel().getOfficeId());
+						result.setGdsModel(model.getGdsModel());
+						result.setCabinClass(r.getSegments().get(0).get(0).getCabinClass().charAt(0));
+						String baggage=r.getSegments().get(0).get(0).getIncludedBaggage();
+						if(baggage != null) {
+							result.setBaggageAllowance(true);
+						}else {
+							result.setBaggageAllowance(false);
+						}
+						result.setGdsTimeZone(model.getGdsModel().getGdsTimeZone());
+						result.setGdsNotification(model.getGdsModel().getGdsNotification());
+						result.setGdsDisplayNotif(model.getGdsModel().getDisplayNotif());
+						result.setGdsDevise(model.getGdsModel().getCodeDevise());
+						
+						//****
 					
 					AirItineraryPricingInfoModel airIt = new AirItineraryPricingInfoModel();
 
@@ -126,11 +144,21 @@ public class ServiceMapFareQuote {
 						FlightSegmentModel flightSegment = new FlightSegmentModel();
 
 						
+						
 						flightSegment.setCabinClassCode(k.getCabinClass());
-						System.out.println("--------------------->"+flightSegment.getCabinClassCode());
+						System.out.println("--------------------->" + flightSegment.getCabinClassCode());
 
-						flightSegment.setArrivalDateTime(String.valueOf(k.getArrivalTime()));
-						flightSegment.setDepartureDateTime(String.valueOf(k.getDepartureDate()));
+						flightSegment.setArrivalDateTime( k.getArrivalTime());
+						flightSegment.setDepartureDateTime( k.getDepartureTime());
+						
+						flightSegment.setDepartureDateModel(k.getDepartureTime().substring(0, Math.min(k.getArrivalTime().length(), 10)));
+						flightSegment.setDepartureTimeModel(k.getDepartureTime().substring(11, k.getDepartureTime().length()));
+						
+						flightSegment.setArrivalDateModel(k.getArrivalTime().substring(0, Math.min(k.getArrivalTime().length(), 10)));
+						flightSegment.setArrivalTimeModel(k.getArrivalTime().substring(11, k.getArrivalTime().length()));
+						
+						
+						
 						flightSegment.setEticket(k.iseTicketEligible());
 						
 						flightSegment.setFligthDuration(k.getDuration());
@@ -139,11 +167,22 @@ public class ServiceMapFareQuote {
 						flightSegment.setBaggage(k.getIncludedBaggage());
 						flightSegment.setAirlinePnr(String.valueOf(k.getAirlinePNR()));
 						flightSegment.setArrivalAirportLocationCode(k.getDestination().getAirportCode());
+						System.out.println("name "+k.getDestination().getAirportName());
+						System.out.println("code "+k.getDestination().getAirportCode());
+
 						flightSegment.setArrivalAirportLocation(k.getDestination().getAirportName());
-						flightSegment.setDepartureAirportLocationCode(k.getOrigin().getAirportCode());
+						flightSegment.setDepartureAirportLocationCode(k.getDestination().getAirportCode());
+						
 						flightSegment.setDepartureAirportLocation(k.getOrigin().getAirportName());
 						flightSegment.setFlightNumber(k.getAirlineDetails().getFlightNumber());
 						flightSegment.setAirlineReservationCode(k.getAirlineDetails().getAirlineCode());
+						flightSegment.setMarketingAirline(k.getAirlineDetails().getAirlineName());
+						flightSegment.setMarketingAirlineCode(k.getAirlineDetails().getAirlineCode());
+						flightSegment.setCabinClassText(k.getCabinClass());
+						flightSegment.setCabinClassCode(k.getCabinClass());
+						flightSegment.setSeat(String.valueOf(k.getNoOfSeatAvailable()));
+						flightSegment.setStopoverTime(String.valueOf(k.getStops()));
+						//flightSegment.setJourneyDuration(Integer.valueOf(k.getDuration()));
 						
 						
 						flightSegments.add(flightSegment);
