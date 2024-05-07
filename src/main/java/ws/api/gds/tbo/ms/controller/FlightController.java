@@ -81,8 +81,8 @@ public class FlightController {
 
 	}
 
-	@PostMapping("/fareQuote")
-	public ResponseEntity<AirRevalidateResponseModel> fareQuoteMeth(@RequestBody PricedItineraryModel model) {
+	@PostMapping("/revalidate")
+	public ResponseEntity<AirRevalidateResponseModel> fareQuoteMeth(@RequestBody PricedItineraryModel model) throws IOException {
 		AirRevalidateResponseModel result = fareQuoteService.fareQuote(model);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);

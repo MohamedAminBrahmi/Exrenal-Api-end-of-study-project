@@ -10,8 +10,13 @@ import ws.api.gds.tbo.ms.domain.FareQuoteResponse;
 import ws.api.gds.tbo.ms.model.AirItineraryPricingInfoModel;
 import ws.api.gds.tbo.ms.model.AirRevalidateResponseModel;
 import ws.api.gds.tbo.ms.model.ErrorModel;
+import ws.api.gds.tbo.ms.model.FareModel;
 import ws.api.gds.tbo.ms.model.FlightSegmentModel;
+import ws.api.gds.tbo.ms.model.ItinTotalFareModel;
 import ws.api.gds.tbo.ms.model.OriginDestinationOptionModel;
+import ws.api.gds.tbo.ms.model.PTCFareBreakdownModel;
+import ws.api.gds.tbo.ms.model.PassengerFareModel;
+import ws.api.gds.tbo.ms.model.PassengerTypeQuantityModel;
 import ws.api.gds.tbo.ms.model.PricedItineraryModel;
 
 
@@ -117,6 +122,77 @@ public class ServiceMapFareQuote {
 						airIt.setIsRefundable("N");
 					}else {
 						airIt.setIsRefundable("O");
+
+					}
+					/*
+					 * Start mapping PTCFareBreakdownModel
+					 */
+					List<PTCFareBreakdownModel> ptcFareBreakdowns = new ArrayList<>();
+					r.getFareBreakdown().forEach(f -> {
+
+						PTCFareBreakdownModel ptcFareBreakdown = new PTCFareBreakdownModel();
+						// mapping PassengerTypeQuantityModel
+						PassengerTypeQuantityModel passengerTypeQuantityModel = new PassengerTypeQuantityModel();
+						passengerTypeQuantityModel.setQuantity(f.getPassengerCount());
+						passengerTypeQuantityModel.setCode(f.getPassengerType() == 1 ? "AHD" : f.getPassengerType() ==2 ? "CHD" : "INF");
+						ptcFareBreakdown.setPassengerTypeQuantity(passengerTypeQuantityModel);
+
+						// mapping PassengerFareModel
+						PassengerFareModel passengerFareModel = new PassengerFareModel();
+						// mapping totalFare
+						FareModel totalFare = new FareModel();
+						totalFare.setAmount(Double.toString(f.getTotalFare()));
+						totalFare.setCurrencyCode(f.getCurrency());
+						totalFare.setDecimalPlaces(2);
+						// mapping baseFare
+						FareModel baseFare = new FareModel();
+						baseFare.setAmount(Double.toString(f.getBaseFare()));
+						baseFare.setCurrencyCode(f.getCurrency());
+						baseFare.setDecimalPlaces(2);
+
+						// mapping tax
+						FareModel tax = new FareModel();
+						tax.setAmount(Double.toString(f.getTax()));
+						tax.setCurrencyCode(f.getCurrency());
+						tax.setDecimalPlaces(2);
+
+						passengerFareModel.setTotalFare(totalFare);
+						passengerFareModel.setBaseFare(baseFare);
+						passengerFareModel.setTax(tax);
+						ptcFareBreakdown.setPassengerFare(passengerFareModel);
+						ptcFareBreakdowns.add(ptcFareBreakdown);
+
+					});
+					/*
+					 * End mapping PTCFareBreakdownModel
+					 */
+					
+					/*
+					 * Start mapping ItinTotalFareModel
+					 */
+					ItinTotalFareModel itinTotalFare = new ItinTotalFareModel();
+					if(r.getFare()!= null) {
+						// mapping totalFare
+						FareModel totalFare = new FareModel();
+						totalFare.setAmount(Double.toString(r.getFare().getTotalFare()));
+						totalFare.setCurrencyCode(r.getFare().getAgentPreferredCurrency());
+						totalFare.setDecimalPlaces(2);
+						// mapping baseFare
+						FareModel baseFare = new FareModel();
+						baseFare.setAmount(Double.toString(r.getFare().getBaseFare()));
+						baseFare.setCurrencyCode(r.getFare().getAgentPreferredCurrency());
+						baseFare.setDecimalPlaces(2);
+
+						// mapping tax
+						FareModel tax = new FareModel();
+						tax.setAmount(Double.toString(r.getFare().getTax()));
+						tax.setCurrencyCode(r.getFare().getAgentPreferredCurrency());
+						tax.setDecimalPlaces(2);
+						itinTotalFare.setBaseFare(baseFare);
+						itinTotalFare.setTotaleFare((float) r.getFare().getTotalFare());
+						itinTotalFare.setTotalFare(totalFare);
+						itinTotalFare.setTotalTax(tax);
+						
 
 					}
 
