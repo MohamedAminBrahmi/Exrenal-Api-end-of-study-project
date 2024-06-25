@@ -1,6 +1,7 @@
 package ws.api.gds.tbo.ms.mappingService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -196,17 +197,18 @@ public class ServiceMapFareQuote {
 
 					}
 
-					
-					System.out.println("--------------------->"+airIt.getFareType());
-					System.out.println("--------------------->"+airIt.getIsRefundable());
-					
-					
-					result.setAirItineraryPricingInfo(airIt);
+					airIt.setPtcFareBreakdowns(ptcFareBreakdowns);
+					airIt.setItinTotalFare(itinTotalFare);
+					System.out.println("itinTotalFare "+itinTotalFare.toString());
 					
 					
-					
+					System.out.println("--------------------->" + airIt.getFareType());
+					System.out.println("--------------------->" + airIt.getIsRefundable());
+
+					result.setAirItineraryPricingInfos( Arrays.asList(airIt) );
+					System.out.println("airIt "+result.getAirItineraryPricingInfos());
 					List<OriginDestinationOptionModel>  OriginList = new ArrayList<>();
-					
+					 
 					r.getSegments().forEach(j -> {
 						List<FlightSegmentModel> flightSegments = new ArrayList<>();
 
